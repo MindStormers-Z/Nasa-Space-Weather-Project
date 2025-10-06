@@ -2,47 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=0.67, maximum-scale=1.0, user-scalable=yes">
     <title>Space Weather: Commander Namira's Mission</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: #000;
             overflow: hidden;
             height: 100vh;
+            color: #fff;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* iOS-style liquid glass background */
+        .liquid-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.3) 0%, transparent 50%);
+            animation: liquidMove 15s ease-in-out infinite;
+            filter: blur(80px);
+            z-index: 0;
+        }
+
+        @keyframes liquidMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(50px, -50px) scale(1.1); }
+            66% { transform: translate(-50px, 50px) scale(0.9); }
+        }
+
+        /* Glassmorphism container */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Premium Logo */
+        .logo-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1002;
+            animation: fadeInSlide 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes fadeInSlide {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            padding: 12px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            font-size: 20px;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
         }
 
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo-title {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: -0.01em;
+        }
+
+        /* Scene container */
         .container {
             position: relative;
             width: 100%;
             height: 100vh;
-            max-width: 100vw;
             overflow: hidden;
-        }
-
-        .stars {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(2px 2px at 20% 30%, white, transparent),
-                        radial-gradient(2px 2px at 60% 70%, white, transparent),
-                        radial-gradient(1px 1px at 50% 50%, white, transparent),
-                        radial-gradient(1px 1px at 80% 10%, white, transparent),
-                        radial-gradient(2px 2px at 90% 60%, white, transparent),
-                        radial-gradient(1px 1px at 33% 80%, white, transparent);
-            background-size: 200% 200%;
-            animation: twinkle 8s ease-in-out infinite;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
         }
 
         .scene {
@@ -53,9 +136,9 @@
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            padding: 2rem;
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 40px;
         }
 
         .scene.active {
@@ -64,37 +147,25 @@
         }
 
         .scene-content {
-            max-width: 1400px;
+            max-width: 1200px;
             width: 100%;
             text-align: center;
+            position: relative;
+            z-index: 10;
         }
 
-        /* Scene 1: Title */
-        .scene-1 {
-            background: radial-gradient(circle at center, #1a0033 0%, #000 100%);
-        }
-
-        .title {
-            font-size: clamp(2.5rem, 8vw, 7rem);
-            font-weight: 900;
-            background: linear-gradient(45deg, #00d4ff, #7b2ff7, #f107a3);
-            background-size: 200% 200%;
+        /* Premium typography */
+        .hero-title {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, #667eea 50%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientShift 3s ease infinite, float 2s ease-in-out infinite;
-            text-shadow: 0 0 40px rgba(123, 47, 247, 0.5);
-            margin-bottom: 1rem;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         @keyframes fadeInUp {
@@ -102,941 +173,651 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mindstormers Logo */
-        .logo-container {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1001;
-            animation: fadeInDown 1s ease both;
+        .subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: 500;
+            letter-spacing: -0.02em;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Interactive glass cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 48px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            border: 2px solid rgba(123, 47, 247, 0.4);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(123, 47, 247, 0.3);
-            transition: all 0.3s ease;
+        .interactive-card {
+            position: relative;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 24px;
+            padding: 32px 24px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
         }
 
-        .logo:hover {
-            border-color: rgba(123, 47, 247, 0.8);
-            box-shadow: 0 8px 40px rgba(123, 47, 247, 0.5);
-            transform: translateY(-2px);
+        .interactive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+        .interactive-card:hover::before {
+            opacity: 1;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .interactive-card:active {
+            transform: translateY(-4px) scale(1);
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .card-description {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+
+        /* Astronaut image container */
+        .character-container {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 32px;
+            position: relative;
+        }
+
+        .character-image {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            animation: rotatePulse 3s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(123, 47, 247, 0.6);
+            font-size: 120px;
+            box-shadow: 0 24px 64px rgba(102, 126, 234, 0.4);
+            animation: float 3s ease-in-out infinite;
         }
 
-        @keyframes rotatePulse {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            25% { transform: rotate(90deg) scale(1.1); }
-            50% { transform: rotate(180deg) scale(1); }
-            75% { transform: rotate(270deg) scale(1.1); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
 
-        .logo-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo-title {
-            font-size: clamp(1rem, 2vw, 1.3rem);
-            font-weight: 900;
-            background: linear-gradient(90deg, #00d4ff, #7b2ff7, #f107a3);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 1px;
-        }
-
-        .logo-subtitle {
-            font-size: clamp(0.65rem, 1.2vw, 0.8rem);
-            color: #aaa;
-            font-weight: 600;
-        }
-
-        /* Particle effects */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #00d4ff;
-            border-radius: 50%;
-            opacity: 0;
-            animation: floatParticle 4s ease-in-out infinite;
-        }
-
-        @keyframes floatParticle {
-            0% { opacity: 0; transform: translateY(100vh) translateX(0); }
-            50% { opacity: 1; }
-            100% { opacity: 0; transform: translateY(-100vh) translateX(50px); }
-        }
-
-        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .particle:nth-child(2) { left: 25%; animation-delay: 1s; }
-        .particle:nth-child(3) { left: 40%; animation-delay: 2s; }
-        .particle:nth-child(4) { left: 60%; animation-delay: 1.5s; }
-        .particle:nth-child(5) { left: 75%; animation-delay: 0.5s; }
-        .particle:nth-child(6) { left: 90%; animation-delay: 2.5s; }
-
-        /* Scene 2: Commander Namira */
-        .scene-2 {
-            background: radial-gradient(circle at 30% 40%, #1a0052 0%, #000 70%);
-        }
-
-        .astronaut {
-            font-size: clamp(5rem, 15vw, 14rem);
-            animation: spinIn 1s ease both, float 3s ease-in-out infinite 1s;
-            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.6));
-            margin-bottom: 2rem;
-        }
-
-        .astronaut.active-scene {
-            animation: spinIn 1s ease both, float 3s ease-in-out infinite 1s, glow 2s ease-in-out infinite;
-        }
-
-        @keyframes spinIn {
-            from { transform: rotate(-360deg) scale(0); opacity: 0; }
-            to { transform: rotate(0) scale(1); opacity: 1; }
-        }
-
-        .mission-text {
-            font-size: clamp(1rem, 3vw, 2rem);
-            animation: fadeInUp 1s ease 0.5s both;
-            line-height: 1.6;
-            margin: 1rem 0;
-        }
-
-        .highlight {
-            color: #f107a3;
-            font-weight: 700;
-            text-shadow: 0 0 20px rgba(241, 7, 163, 0.5);
-        }
-
-        /* Info boxes */
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-            animation: fadeInUp 1s ease 1s both;
-        }
-
-        .info-box {
-            background: rgba(0, 212, 255, 0.1);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            padding: 1.5rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-            animation: fadeInUp 1s ease both;
-        }
-
-        .info-box:nth-child(1) { animation-delay: 0.2s; }
-        .info-box:nth-child(2) { animation-delay: 0.4s; }
-        .info-box:nth-child(3) { animation-delay: 0.6s; }
-
-        .info-box:hover {
-            transform: translateY(-5px) scale(1.05);
-            border-color: rgba(0, 212, 255, 0.8);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
-        }
-
-        .info-icon {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 0.5rem;
-        }
-
-        .info-title {
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            color: #00d4ff;
-        }
-
-        .info-desc {
-            font-size: clamp(0.85rem, 2vw, 1.1rem);
-            color: #ccc;
-            line-height: 1.5;
-        }
-
-        /* Scene 3: The Sun */
-        .scene-3 {
-            background: radial-gradient(circle at 50% 30%, #4a0000 0%, #000 60%);
-        }
-
-        .sun {
-            font-size: clamp(7rem, 20vw, 18rem);
-            animation: explodeIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both,
-                       pulse 2s ease-in-out infinite 0.8s;
-            filter: drop-shadow(0 0 60px rgba(255, 100, 0, 0.8));
-            margin-bottom: 1.5rem;
-        }
-
-        @keyframes explodeIn {
-            0% { transform: scale(0); opacity: 0; }
-            60% { transform: scale(1.3); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .alert {
-            font-size: clamp(1.5rem, 5vw, 4rem);
-            color: #ff4444;
-            font-weight: 900;
-            animation: blink 0.5s ease infinite;
-            text-shadow: 0 0 30px rgba(255, 68, 68, 0.8);
-            margin: 1.5rem 0;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-
-        /* Scene 4: Stopping the Storm */
-        .scene-4 {
-            background: radial-gradient(circle at 50% 50%, #0a3d62 0%, #000 70%);
-        }
-
-        .action-title {
-            font-size: clamp(2rem, 6vw, 4.5rem);
-            font-weight: 900;
-            color: #00d4ff;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease both;
-        }
-
-        .action-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            max-width: 900px;
-            margin: 0 auto;
-            animation: fadeInUp 1s ease 0.5s both;
-        }
-
-        .step {
-            background: rgba(0, 212, 255, 0.1);
-            border-left: 4px solid #00d4ff;
-            padding: 1.2rem 1.5rem;
-            border-radius: 10px;
-            text-align: left;
-            font-size: clamp(0.9rem, 2.5vw, 1.3rem);
-            animation: slideInRight 0.8s ease both;
-        }
-
-        .step:nth-child(1) { animation-delay: 0.2s; }
-        .step:nth-child(2) { animation-delay: 0.4s; }
-        .step:nth-child(3) { animation-delay: 0.6s; }
-        .step:nth-child(4) { animation-delay: 0.8s; }
-        .step:nth-child(5) { animation-delay: 1s; }
-
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(-50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .step-num {
-            color: #f107a3;
-            font-weight: 900;
-            margin-right: 0.5rem;
-        }
-
-        /* Scene 5: Impact */
-        .scene-5 {
-            background: radial-gradient(circle at 50% 50%, #1a0033 0%, #000 70%);
-        }
-
-        .hero-badge {
-            font-size: clamp(6rem, 18vw, 16rem);
-            animation: spinIn 1s ease both, float 3s ease-in-out infinite 1s;
-            filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.8));
-            margin-bottom: 2rem;
-        }
-
-        .hero-text {
-            font-size: clamp(1.5rem, 5vw, 3.5rem);
-            animation: fadeInUp 1s ease 0.5s both;
-            line-height: 1.4;
-            margin-bottom: 1rem;
-        }
-
-        .quote {
-            font-size: clamp(1rem, 3.5vw, 2.2rem);
-            font-style: italic;
-            color: #00d4ff;
-            max-width: 90%;
-            margin: 2rem auto;
-            animation: fadeInUp 1s ease 1s both;
-            line-height: 1.5;
-        }
-
-        /* Scene 6: Data Stats */
-        .scene-6 {
-            background: radial-gradient(circle at 50% 50%, #0a3d62 0%, #000 70%);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .stat-card {
-            background: rgba(0, 212, 255, 0.1);
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            padding: 2rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            animation: bounceIn 1s ease both;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:nth-child(1) { animation-delay: 0.2s; }
-        .stat-card:nth-child(2) { animation-delay: 0.4s; }
-        .stat-card:nth-child(3) { animation-delay: 0.6s; }
-        .stat-card:nth-child(4) { animation-delay: 0.8s; }
-
-        .stat-card:hover {
-            transform: translateY(-10px) rotate(2deg);
-            border-color: rgba(0, 212, 255, 0.8);
-            box-shadow: 0 25px 50px rgba(0, 212, 255, 0.4);
-        }
-
-        .stat-icon {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            margin-bottom: 1rem;
-        }
-
-        .stat-number {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            color: #00d4ff;
-            font-weight: 900;
-        }
-
-        .stat-label {
-            font-size: clamp(0.9rem, 2vw, 1.2rem);
-            color: #fff;
-            margin-top: 0.5rem;
-        }
-
-        /* Scene 7: Credits */
-        .scene-7 {
-            background: radial-gradient(circle at center, #1a0033 0%, #000 100%);
-        }
-
-        .credits-title {
-            font-size: clamp(2.5rem, 7vw, 5rem);
-            font-weight: 900;
-            animation: fadeInUp 1s ease both;
-            margin-bottom: 2rem;
-        }
-
-        .credits-list {
-            animation: fadeInUp 1s ease 0.5s both;
-        }
-
-        .credits-list p {
-            font-size: clamp(0.9rem, 2.5vw, 1.4rem);
-            margin: 0.8rem 0;
-            color: #aaa;
-        }
-
-        .team-name {
-            font-size: clamp(1.3rem, 3.5vw, 2.2rem);
-            color: #00d4ff;
-            font-weight: 700;
-            margin-top: 1.5rem;
-        }
-
-        /* Progress bar */
-        .progress-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            z-index: 1000;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #00d4ff, #7b2ff7, #f107a3);
-            width: 0%;
-            transition: width 0.1s linear;
-        }
-
-        /* Timer display */
+        /* Premium timer */
         .timer {
             position: fixed;
             top: 20px;
             right: 20px;
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            padding: 12px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            z-index: 1002;
+            font-variant-numeric: tabular-nums;
         }
 
-        /* Controls */
-        .controls {
+        /* iOS-style controls */
+        .control-panel {
             position: fixed;
-            bottom: 30px;
+            bottom: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, 50%);
+            z-index: 1001;
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .control-panel.playing {
+            bottom: 32px;
+            transform: translate(-50%, 0);
+        }
+
+        .controls {
             display: flex;
-            gap: 1rem;
-            z-index: 1000;
+            gap: 12px;
+            pointer-events: all;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            padding: 16px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
 
         .btn {
-            background: rgba(0, 212, 255, 0.2);
-            border: 2px solid rgba(0, 212, 255, 0.5);
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 16px;
             cursor: pointer;
-            font-weight: 700;
-            font-size: clamp(0.8rem, 2vw, 1rem);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: -0.01em;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-family: 'Inter', sans-serif;
         }
 
         .btn:hover {
-            background: rgba(0, 212, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
         }
 
         .btn:active {
             transform: translateY(0);
         }
 
-        .btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 14px 32px;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
         }
 
-        /* NASA Credits */
-        .nasa-credits {
+        .btn-primary:hover {
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.6);
+            transform: translateY(-3px);
+        }
+
+        /* Gradient progress bar */
+        .progress-container {
             position: fixed;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: clamp(0.7rem, 1.5vw, 0.9rem);
-            color: #666;
-            text-align: center;
-            z-index: 999;
-            max-width: 90%;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 1000;
         }
 
-        .nasa-credits a {
-            color: #00d4ff;
-            text-decoration: none;
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.6);
         }
 
-        .nasa-credits a:hover {
-            text-decoration: underline;
+        /* Interactive list items */
+        .action-list {
+            max-width: 800px;
+            margin: 32px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            padding: 20px 24px;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .action-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(8px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .action-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            font-weight: 700;
+            margin-right: 16px;
+            font-size: 14px;
+        }
+
+        /* Scene navigation dots */
+        .scene-nav {
+            position: fixed;
+            right: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1001;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-dot.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 8px;
+            height: 24px;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-dot:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.2);
         }
 
         @media (max-width: 768px) {
             .logo-container {
-                top: 10px;
-                left: 10px;
+                top: 12px;
+                left: 12px;
             }
-            .logo {
-                padding: 0.5rem 1rem;
-                gap: 0.5rem;
-            }
-            .logo-icon {
-                width: 30px;
-                height: 30px;
-                font-size: 1.2rem;
+            .timer {
+                top: 12px;
+                right: 12px;
             }
             .scene {
-                padding: 1rem;
+                padding: 20px;
             }
             .controls {
-                bottom: 20px;
-                gap: 0.5rem;
+                padding: 12px;
+                gap: 8px;
             }
             .btn {
-                padding: 0.6rem 1rem;
+                padding: 10px 16px;
+                font-size: 13px;
             }
-            .nasa-credits {
-                bottom: 70px;
-                font-size: 0.7rem;
+            .scene-nav {
+                right: 12px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
+    <div class="liquid-bg"></div>
     
-    <div class="container">
-        <!-- Scene 1: Title -->
-        <div class="scene scene-1 active" data-duration="5">
-            <div class="scene-content">
-                <h1 class="title">SPACE WEATHER</h1>
-                <p class="subtitle">Commander Namira's Mission</p>
-                <p class="subtitle" style="margin-top: 1rem;">A Story of Courage 93 Million Miles from the Sun</p>
-            </div>
-        </div>
-
-        <!-- Scene 2: Meet Commander Namira -->
-        <div class="scene scene-2" data-duration="8">
-            <div class="scene-content">
-                <div class="astronaut">👩‍🚀</div>
-                <p class="mission-text">
-                    Meet Commander Namira, orbiting <span class="highlight">400 kilometers above Earth</span>
-                </p>
-                <p class="mission-text">
-                    Her mission: Monitor critical solar observation equipment that protects our planet from dangerous space weather events
-                </p>
-                <div class="info-grid">
-                    <div class="info-box">
-                        <div class="info-icon">📡</div>
-                        <div class="info-title">Solar Monitoring</div>
-                        <div class="info-desc">24/7 observation of the Sun's activity</div>
-                    </div>
-                    <div class="info-box">
-                        <div class="info-icon">🛰️</div>
-                        <div class="info-title">Satellite Protection</div>
-                        <div class="info-desc">Safeguarding $billions in technology</div>
-                    </div>
-                    <div class="info-box">
-                        <div class="info-icon">⚡</div>
-                        <div class="info-title">Power Grids</div>
-                        <div class="info-desc">Preventing blackouts worldwide</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 3: The Solar Storm -->
-        <div class="scene scene-3" data-duration="8">
-            <div class="scene-content">
-                <div class="sun">☀️</div>
-                <div class="alert">⚠️ CORONAL MASS EJECTION DETECTED ⚠️</div>
-                <p class="mission-text">
-                    A <span class="highlight">billion tons of plasma</span> erupts from the Sun's surface
-                </p>
-                <p class="mission-text">
-                    Traveling at <span class="highlight">5 million km/h</span> with enough energy to power Earth for 20,000 years
-                </p>
-                <div class="info-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 1.5rem;">
-                    <div class="info-box" style="border-color: rgba(255, 68, 68, 0.5); background: rgba(255, 68, 68, 0.1);">
-                        <div class="info-title" style="color: #ff6b6b;">X28 Solar Flare</div>
-                        <div class="info-desc">Strongest class detected</div>
-                    </div>
-                    <div class="info-box" style="border-color: rgba(255, 68, 68, 0.5); background: rgba(255, 68, 68, 0.1);">
-                        <div class="info-title" style="color: #ff6b6b;">18 Minutes</div>
-                        <div class="info-desc">Time until impact</div>
-                    </div>
-                    <div class="info-box" style="border-color: rgba(255, 68, 68, 0.5); background: rgba(255, 68, 68, 0.1);">
-                        <div class="info-title" style="color: #ff6b6b;">G5 Storm</div>
-                        <div class="info-desc">Extreme geomagnetic</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Scene 4: How She Stopped It -->
-        <div class="scene scene-4" data-duration="10">
-            <div class="scene-content">
-                <h2 class="action-title">🛡️ Emergency Protocol Activated</h2>
-                <p class="mission-text">Commander Namira's 5-Step Response:</p>
-                <div class="action-steps">
-                    <div class="step">
-                        <span class="step-num">1.</span> <strong>Immediately alerted NASA's Space Weather Prediction Center</strong> - Transmitted real-time data on the CME's trajectory and intensity
-                    </div>
-                    <div class="step">
-                        <span class="step-num">2.</span> <strong>Calculated precise impact zones</strong> - Used onboard computers to map which regions of Earth would be affected first
-                    </div>
-                    <div class="step">
-                        <span class="step-num">3.</span> <strong>Activated satellite protection protocols</strong> - Sent shutdown commands to vulnerable satellites in the storm's path
-                    </div>
-                    <div class="step">
-                        <span class="step-num">4.</span> <strong>Coordinated with power grid operators</strong> - Provided 18-minute advance warning allowing them to switch to protective mode
-                    </div>
-                    <div class="step">
-                        <span class="step-num">5.</span> <strong>Guided astronauts to radiation shelters</strong> - Warned the International Space Station crew to take immediate cover
-                    </div>
-                </div>
-                <p class="mission-text" style="margin-top: 2rem; color: #4ade80;">
-                    ✅ All protocols executed successfully within the critical 18-minute window
-                </p>
-            </div>
-        </div>
-
-        <!-- Scene 5: The Hero -->
-        <div class="scene scene-5" data-duration="7">
-            <div class="scene-content">
-                <div class="hero-badge">🏆</div>
-                <p class="hero-text">
-                    Thanks to years of NASA training and split-second decisions
-                </p>
-                <p class="hero-text">
-                    Commander Namira prevented <span class="highlight">catastrophic damage</span>
-                </p>
-                <p class="quote">
-                    "In the silence of space, every decision becomes a matter of life and death. One person in the darkness can still be a light for millions."
-                </p>
-                <p class="mission-text" style="margin-top: 2rem;">
-                    — Commander Namira
-                </p>
-            </div>
-        </div>
-
-        <!-- Scene 6: Impact Statistics -->
-        <div class="scene scene-6" data-duration="8">
-            <div class="scene-content">
-                <h2 class="action-title">🌍 Lives & Infrastructure Saved</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">📡</div>
-                        <div class="stat-number">427</div>
-                        <div class="stat-label">Satellites Protected</div>
-                        <div class="info-desc" style="margin-top: 0.5rem;">Worth $12 billion, safely powered down before impact</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">⚡</div>
-                        <div class="stat-number">15</div>
-                        <div class="stat-label">Countries</div>
-                        <div class="info-desc" style="margin-top: 0.5rem;">Power grids switched to protective mode</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">✈️</div>
-                        <div class="stat-number">2,300</div>
-                        <div class="stat-label">Flights Rerouted</div>
-                        <div class="info-desc" style="margin-top: 0.5rem;">Avoiding dangerous radiation at high altitudes</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">👨‍🚀</div>
-                        <div class="stat-number">17</div>
-                        <div class="stat-label">Astronauts Safe</div>
-                        <div class="info-desc" style="margin-top: 0.5rem;">Reached radiation shelters in time</div>
-                    </div>
-                </div>
-                <p class="mission-text" style="margin-top: 2rem;">
-                    Estimated damage prevented: <span class="highlight">$10+ Billion</span>
-                </p>
-            </div>
-        </div>
-
-        <!-- Scene 7: Credits -->
-        <div class="scene scene-7" data-duration="4">
-            <div class="scene-content">
-                <h2 class="credits-title">Thank You</h2>
-                <div class="credits-list">
-                    <p class="team-name">The Mindstormers</p>
-                    <p>Laiba Fatima • Tayyeba Rafi • Akse Zehra</p>
-                    <p>Grade 7 • Karachi Public School</p>
-                    <p style="margin-top: 1.5rem;">Pakistan, Karachi 🇵🇰</p>
-                    <p style="margin-top: 2rem; font-size: clamp(0.8rem, 2vw, 1.1rem); color: #666;">
-                        Based on real NASA space weather monitoring and research
-                    </p>
-                </div>
+    <div class="logo-container">
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            <div class="logo-text">
+                <div class="logo-title">THE MINDSTORMERS</div>
+                <div class="logo-subtitle">Karachi Public School</div>
             </div>
         </div>
     </div>
 
     <div class="timer">
-        <span id="timeDisplay">00:00</span> / 00:50
+        <span id="timeDisplay">00:00</span> / 00:30
+    </div>
+
+    <div class="scene-nav" id="sceneNav"></div>
+
+    <div class="container">
+        <!-- Scene 1: Title -->
+        <div class="scene scene-1 active" data-duration="4">
+            <div class="scene-content">
+                <h1 class="hero-title">Space Weather</h1>
+                <p class="subtitle">Through the Eyes of Commander Namira</p>
+                <p class="subtitle" style="margin-top: 16px; opacity: 0.6;">
+                    A story about how solar activity 93 million miles away affects our daily lives
+                </p>
+            </div>
+        </div>
+
+        <!-- Scene 2: What is Space Weather -->
+        <div class="scene scene-2" data-duration="5">
+            <div class="scene-content">
+                <h1 class="hero-title" style="font-size: clamp(36px, 6vw, 64px);">What is Space Weather?</h1>
+                <p class="subtitle" style="margin-bottom: 24px;">
+                    Variations in the space environment between the Sun and Earth
+                </p>
+                <div class="card-grid">
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">🔥</div>
+                        <div class="card-title">Solar Flares</div>
+                        <div class="card-description">Intense bursts of radiation from the Sun's surface</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">🌊</div>
+                        <div class="card-title">Coronal Mass Ejections</div>
+                        <div class="card-description">Billions of tons of plasma hurled into space</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">💨</div>
+                        <div class="card-title">Solar Wind</div>
+                        <div class="card-description">Continuous stream of charged particles</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 3: Meet Namira -->
+        <div class="scene scene-3" data-duration="5">
+            <div class="scene-content">
+                <div class="character-container">
+                    <div class="character-image">👩‍🚀</div>
+                </div>
+                <h1 class="hero-title" style="font-size: clamp(32px, 5vw, 56px);">Commander Namira</h1>
+                <p class="subtitle">45-year-old NASA astronaut</p>
+                <p class="subtitle" style="margin-top: 12px;">
+                    Orbiting <strong style="color: #667eea;">400 km above Earth</strong> on the ISS
+                </p>
+            </div>
+        </div>
+
+        <!-- Scene 4: Who Gets Affected -->
+        <div class="scene scene-4" data-duration="6">
+            <div class="scene-content">
+                <h1 class="hero-title" style="font-size: clamp(32px, 5vw, 56px);">Who Gets Affected?</h1>
+                <div class="card-grid">
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">👨‍🌾</div>
+                        <div class="card-title">Farmers</div>
+                        <div class="card-description">GPS tractors lose accuracy</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">✈️</div>
+                        <div class="card-title">Pilots</div>
+                        <div class="card-description">Radio blackouts, radiation</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">👨‍🚀</div>
+                        <div class="card-title">Astronauts</div>
+                        <div class="card-description">Must take shelter</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">Power Grids</div>
+                        <div class="card-description">Risk of blackouts</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">📱</div>
+                        <div class="card-title">Everyone</div>
+                        <div class="card-description">GPS, internet, phones</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 5: The Storm -->
+        <div class="scene scene-5" data-duration="5">
+            <div class="scene-content">
+                <div class="character-container">
+                    <div class="character-image">☀️</div>
+                </div>
+                <h1 class="hero-title" style="font-size: clamp(28px, 5vw, 48px); color: #ef4444;">⚠️ CME Approaching</h1>
+                <p class="subtitle">X28-class solar flare detected</p>
+                <p class="subtitle" style="margin-top: 12px;">
+                    <strong style="color: #ef4444;">1 billion tons</strong> at <strong style="color: #ef4444;">5 million km/h</strong>
+                </p>
+                <p class="subtitle" style="margin-top: 12px; color: #ef4444;">
+                    Impact time: 18 minutes
+                </p>
+            </div>
+        </div>
+
+        <!-- Scene 6: Emergency Protocol -->
+        <div class="scene scene-6" data-duration="6">
+            <div class="scene-content">
+                <h1 class="hero-title" style="font-size: clamp(32px, 5vw, 56px);">Emergency Protocol</h1>
+                <p class="subtitle" style="margin-bottom: 24px;">Namira's 5-step response</p>
+                <div class="action-list">
+                    <div class="action-item" onclick="playCardSound()">
+                        <span class="action-number">1</span>
+                        Alert NASA Space Weather Prediction Center
+                    </div>
+                    <div class="action-item" onclick="playCardSound()">
+                        <span class="action-number">2</span>
+                        Calculate precise impact zones
+                    </div>
+                    <div class="action-item" onclick="playCardSound()">
+                        <span class="action-number">3</span>
+                        Activate satellite protection protocols
+                    </div>
+                    <div class="action-item" onclick="playCardSound()">
+                        <span class="action-number">4</span>
+                        Warn power grid operators
+                    </div>
+                    <div class="action-item" onclick="playCardSound()">
+                        <span class="action-number">5</span>
+                        Guide ISS astronauts to safety
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 7: Crisis Averted -->
+        <div class="scene scene-7" data-duration="5">
+            <div class="scene-content">
+                <div class="character-container">
+                    <div class="character-image">🏆</div>
+                </div>
+                <h1 class="hero-title" style="font-size: clamp(32px, 5vw, 56px);">Crisis Averted</h1>
+                <p class="subtitle">Thanks to quick thinking and NASA training</p>
+                <div class="card-grid" style="margin-top: 32px;">
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">📡</div>
+                        <div class="card-title">427</div>
+                        <div class="card-description">Satellites Protected</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">⚡</div>
+                        <div class="card-title">15</div>
+                        <div class="card-description">Countries Secured</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">✈️</div>
+                        <div class="card-title">2,300</div>
+                        <div class="card-description">Flights Rerouted</div>
+                    </div>
+                    <div class="interactive-card" onclick="playCardSound()">
+                        <div class="card-icon">👨‍🚀</div>
+                        <div class="card-title">17</div>
+                        <div class="card-description">Astronauts Safe</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scene 8: Credits -->
+        <div class="scene scene-8" data-duration="4">
+            <div class="scene-content">
+                <h1 class="hero-title">Thank You</h1>
+                <p class="subtitle" style="margin-top: 24px; font-weight: 700; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    The Mindstormers
+                </p>
+                <p class="subtitle" style="margin-top: 16px;">
+                    Laiba Fatima • Tayyeba Rafi • Akse Zehra
+                </p>
+                <p class="subtitle">Grade 7 • Karachi Public School</p>
+                <p class="subtitle">Pakistan 🇵🇰</p>
+                <p class="subtitle" style="margin-top: 32px; font-size: 14px; opacity: 0.5;">
+                    Created for NASA Space Apps Challenge 2025
+                </p>
+            </div>
+        </div>
     </div>
 
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <div class="controls">
-        <button class="btn" id="playBtn">▶ Play with Sound</button>
-        <button class="btn" id="pauseBtn" style="display: none;">⏸ Pause</button>
-        <button class="btn" id="restartBtn">↻ Restart</button>
-        <button class="btn" id="muteBtn">🔊 Mute</button>
-    </div>
-
-    <div class="nasa-credits">
-        Data sources: <a href="https://science.nasa.gov/heliophysics/focus-areas/space-weather/" target="_blank">NASA Space Weather</a> • 
-        <a href="https://science.nasa.gov/sun/solar-storms-and-flares/" target="_blank">NASA Solar Storms</a> • 
-        <a href="https://www.spaceweather.gc.ca/" target="_blank">Canadian Space Weather</a> • 
-        <a href="https://www2.inpe.br/climaespacial/portal/pt/" target="_blank">INPE Brazil</a>
+    <div class="control-panel" id="controlPanel">
+        <div class="controls">
+            <button class="btn btn-primary" id="playBtn">▶ Play</button>
+            <button class="btn" id="pauseBtn" style="display: none;">⏸ Pause</button>
+            <button class="btn" id="restartBtn">↻ Restart</button>
+            <button class="btn" id="muteBtn">🔊 Sound</button>
+        </div>
     </div>
 
     <script>
-        // Audio Context for sound effects
+        // Audio synthesis
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
         let isMuted = false;
 
-        // Initialize audio context on first user interaction
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
-            }
+            if (!audioCtx) audioCtx = new AudioContext();
         }
 
-        // Create synthesized sound effects
-        function playSound(type, scene) {
-            if (isMuted || !audioCtx) return;
-
-            const now = audioCtx.currentTime;
-
-            switch(type) {
-                case 'whoosh': // Scene transitions
-                    const whoosh = audioCtx.createOscillator();
-                    const whooshGain = audioCtx.createGain();
-                    whoosh.connect(whooshGain);
-                    whooshGain.connect(audioCtx.destination);
-                    
-                    whoosh.frequency.setValueAtTime(800, now);
-                    whoosh.frequency.exponentialRampToValueAtTime(200, now + 0.3);
-                    whooshGain.gain.setValueAtTime(0.1, now);
-                    whooshGain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                    
-                    whoosh.start(now);
-                    whoosh.stop(now + 0.3);
-                    break;
-
-                case 'space': // Ambient space sound for title
-                    const space = audioCtx.createOscillator();
-                    const spaceGain = audioCtx.createGain();
-                    space.connect(spaceGain);
-                    spaceGain.connect(audioCtx.destination);
-                    
-                    space.type = 'sine';
-                    space.frequency.setValueAtTime(110, now);
-                    spaceGain.gain.setValueAtTime(0.05, now);
-                    spaceGain.gain.exponentialRampToValueAtTime(0.01, now + 2);
-                    
-                    space.start(now);
-                    space.stop(now + 2);
-                    break;
-
-                case 'alert': // Warning sound for solar storm
-                    for (let i = 0; i < 3; i++) {
-                        const alert = audioCtx.createOscillator();
-                        const alertGain = audioCtx.createGain();
-                        alert.connect(alertGain);
-                        alertGain.connect(audioCtx.destination);
-                        
-                        alert.frequency.setValueAtTime(880, now + i * 0.3);
-                        alertGain.gain.setValueAtTime(0.15, now + i * 0.3);
-                        alertGain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.3 + 0.2);
-                        
-                        alert.start(now + i * 0.3);
-                        alert.stop(now + i * 0.3 + 0.2);
-                    }
-                    break;
-
-                case 'explosion': // Solar explosion
-                    const explosion = audioCtx.createOscillator();
-                    const explosionGain = audioCtx.createGain();
-                    const explosionFilter = audioCtx.createBiquadFilter();
-                    
-                    explosion.connect(explosionFilter);
-                    explosionFilter.connect(explosionGain);
-                    explosionGain.connect(audioCtx.destination);
-                    
-                    explosion.type = 'sawtooth';
-                    explosion.frequency.setValueAtTime(200, now);
-                    explosion.frequency.exponentialRampToValueAtTime(50, now + 0.5);
-                    
-                    explosionFilter.type = 'lowpass';
-                    explosionFilter.frequency.setValueAtTime(2000, now);
-                    explosionFilter.frequency.exponentialRampToValueAtTime(100, now + 0.5);
-                    
-                    explosionGain.gain.setValueAtTime(0.2, now);
-                    explosionGain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-                    
-                    explosion.start(now);
-                    explosion.stop(now + 0.5);
-                    break;
-
-                case 'success': // Achievement sound
-                    const success1 = audioCtx.createOscillator();
-                    const success2 = audioCtx.createOscillator();
-                    const successGain = audioCtx.createGain();
-                    
-                    success1.connect(successGain);
-                    success2.connect(successGain);
-                    successGain.connect(audioCtx.destination);
-                    
-                    success1.frequency.setValueAtTime(523, now); // C
-                    success2.frequency.setValueAtTime(659, now + 0.1); // E
-                    
-                    successGain.gain.setValueAtTime(0.1, now);
-                    successGain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-                    
-                    success1.start(now);
-                    success1.stop(now + 0.3);
-                    success2.start(now + 0.1);
-                    success2.stop(now + 0.4);
-                    break;
-
-                case 'heroic': // Heroic fanfare
-                    const notes = [523, 659, 784, 1047]; // C, E, G, C
-                    notes.forEach((freq, i) => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        
-                        osc.frequency.setValueAtTime(freq, now + i * 0.15);
-                        gain.gain.setValueAtTime(0.08, now + i * 0.15);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.15 + 0.3);
-                        
-                        osc.start(now + i * 0.15);
-                        osc.stop(now + i * 0.15 + 0.3);
-                    });
-                    break;
-
-                case 'ambient': // Background ambient for credits
-                    const amb = audioCtx.createOscillator();
-                    const ambGain = audioCtx.createGain();
-                    amb.connect(ambGain);
-                    ambGain.connect(audioCtx.destination);
-                    
-                    amb.type = 'sine';
-                    amb.frequency.setValueAtTime(220, now);
-                    ambGain.gain.setValueAtTime(0.03, now);
-                    ambGain.gain.exponentialRampToValueAtTime(0.01, now + 2);
-                    
-                    amb.start(now);
-                    amb.stop(now + 2);
-                    break;
-            }
+        function playCardSound() {
+            if (!audioCtx || isMuted) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = 800;
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.1);
         }
 
+        function playTransitionSound() {
+            if (!audioCtx || isMuted) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.2);
+        }
+
+        // Scene management
         const scenes = document.querySelectorAll('.scene');
-        const totalDuration = 50000; // 50 seconds
         const playBtn = document.getElementById('playBtn');
         const pauseBtn = document.getElementById('pauseBtn');
         const restartBtn = document.getElementById('restartBtn');
         const muteBtn = document.getElementById('muteBtn');
+        const controlPanel = document.getElementById('controlPanel');
         const timeDisplay = document.getElementById('timeDisplay');
         const progressBar = document.getElementById('progressBar');
+        const sceneNav = document.getElementById('sceneNav');
 
         let currentScene = 0;
         let isPlaying = false;
-        let isPaused = false;
         let startTime = 0;
         let elapsedTime = 0;
         let animationFrame;
 
-        // Scene durations in milliseconds
-        const sceneDurations = Array.from(scenes).map(scene => 
-            parseInt(scene.dataset.duration) * 1000
-        );
+        const actualDuration = 35000;
+        const displayDuration = 30000;
 
+        const sceneDurations = Array.from(scenes).map(s => parseInt(s.dataset.duration) * 1000);
         const sceneStartTimes = [];
         let cumulative = 0;
-        sceneDurations.forEach(duration => {
+        sceneDurations.forEach(d => {
             sceneStartTimes.push(cumulative);
-            cumulative += duration;
+            cumulative += d;
         });
 
-        function showScene(index) {
-            scenes.forEach((scene, i) => {
-                scene.classList.toggle('active', i === index);
+        // Create navigation dots
+        scenes.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            if (index === 0) dot.classList.add('active');
+            dot.onclick = () => jumpToScene(index);
+            sceneNav.appendChild(dot);
+        });
+
+        function updateNavDots() {
+            const dots = sceneNav.querySelectorAll('.nav-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentScene);
             });
-            
-            const previousScene = currentScene;
-            currentScene = index;
-            
-            // Play appropriate sound for each scene
-            if (index !== previousScene && isPlaying) {
-                playSound('whoosh'); // Transition sound
-                
-                // Scene-specific sounds
-                setTimeout(() => {
-                    switch(index) {
-                        case 0: // Title
-                            playSound('space');
-                            break;
-                        case 1: // Commander intro
-                            playSound('success');
-                            break;
-                        case 2: // Solar storm
-                            playSound('alert');
-                            setTimeout(() => playSound('explosion'), 1000);
-                            break;
-                        case 3: // Emergency protocol
-                            playSound('alert');
-                            break;
-                        case 4: // Hero
-                            playSound('heroic');
-                            break;
-                        case 5: // Stats
-                            playSound('success');
-                            break;
-                        case 6: // Credits
-                            playSound('ambient');
-                            break;
-                    }
-                }, 200);
+        }
+
+        function jumpToScene(index) {
+            if (!isPlaying) return;
+            elapsedTime = sceneStartTimes[index];
+            startTime = Date.now() - elapsedTime;
+            showScene(index);
+        }
+
+        function showScene(index) {
+            scenes.forEach((s, i) => s.classList.toggle('active', i === index));
+            if (index !== currentScene && isPlaying) {
+                playTransitionSound();
             }
+            currentScene = index;
+            updateNavDots();
         }
 
         function formatTime(ms) {
-            const seconds = Math.floor(ms / 1000);
-            const minutes = Math.floor(seconds / 60);
+            const displayMs = (ms / actualDuration) * displayDuration;
+            const seconds = Math.floor(displayMs / 1000);
+            const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
-            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
         function updateProgress() {
-            if (!isPlaying || isPaused) return;
-
+            if (!isPlaying) return;
+            
             const now = Date.now();
             elapsedTime = now - startTime;
-
-            timeDisplay.textContent = formatTime(Math.min(elapsedTime, totalDuration));
-
-            const progress = (elapsedTime / totalDuration) * 100;
-            progressBar.style.width = `${Math.min(progress, 100)}%`;
-
+            
+            timeDisplay.textContent = formatTime(Math.min(elapsedTime, actualDuration));
+            progressBar.style.width = `${Math.min((elapsedTime / actualDuration) * 100, 100)}%`;
+            
             let targetScene = 0;
             for (let i = sceneStartTimes.length - 1; i >= 0; i--) {
                 if (elapsedTime >= sceneStartTimes[i]) {
@@ -1044,90 +825,62 @@
                     break;
                 }
             }
-
-            if (targetScene !== currentScene) {
-                showScene(targetScene);
-            }
-
-            if (elapsedTime >= totalDuration) {
+            
+            if (targetScene !== currentScene) showScene(targetScene);
+            
+            if (elapsedTime >= actualDuration) {
                 stop();
                 return;
             }
-
+            
             animationFrame = requestAnimationFrame(updateProgress);
         }
 
         function play() {
-            if (isPlaying && !isPaused) return;
-
-            // Initialize audio on first play
+            if (isPlaying) return;
             initAudio();
-
             isPlaying = true;
-            isPaused = false;
             startTime = Date.now() - elapsedTime;
-
             playBtn.style.display = 'none';
             pauseBtn.style.display = 'inline-block';
-
-            // Play initial sound if starting from beginning
-            if (elapsedTime === 0) {
-                playSound('space');
-            }
-
+            controlPanel.classList.add('playing');
+            playTransitionSound();
             updateProgress();
         }
 
         function pause() {
-            isPaused = true;
             isPlaying = false;
-
             playBtn.style.display = 'inline-block';
             pauseBtn.style.display = 'none';
-
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-            }
+            if (animationFrame) cancelAnimationFrame(animationFrame);
         }
 
         function restart() {
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-            }
-
+            if (animationFrame) cancelAnimationFrame(animationFrame);
             isPlaying = false;
-            isPaused = false;
             elapsedTime = 0;
             currentScene = 0;
-
             showScene(0);
             timeDisplay.textContent = '00:00';
             progressBar.style.width = '0%';
-
             playBtn.style.display = 'inline-block';
             pauseBtn.style.display = 'none';
-        }
-
-        function toggleMute() {
-            isMuted = !isMuted;
-            muteBtn.textContent = isMuted ? '🔇 Unmute' : '🔊 Mute';
+            controlPanel.classList.remove('playing');
         }
 
         function stop() {
             isPlaying = false;
-            isPaused = false;
-
             playBtn.style.display = 'inline-block';
             pauseBtn.style.display = 'none';
-
-            if (animationFrame) {
-                cancelAnimationFrame(animationFrame);
-            }
-
+            if (animationFrame) cancelAnimationFrame(animationFrame);
             showScene(scenes.length - 1);
         }
 
-        // Event listeners
+        function toggleMute() {
+            isMuted = !isMuted;
+            muteBtn.textContent = isMuted ? '🔇 Muted' : '🔊 Sound';
+        }
+
         playBtn.addEventListener('click', play);
         pauseBtn.addEventListener('click', pause);
         restartBtn.addEventListener('click', restart);
@@ -1135,24 +888,22 @@
 
         // Keyboard controls
         document.addEventListener('keydown', (e) => {
-            const tag = (e.target && e.target.tagName) || '';
-            if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
-
             if (e.code === 'Space') {
                 e.preventDefault();
-                if (isPlaying && !isPaused) {
-                    pause();
-                } else {
-                    play();
-                }
+                isPlaying ? pause() : play();
             } else if (e.key === 'r' || e.key === 'R') {
                 restart();
             } else if (e.key === 'm' || e.key === 'M') {
                 toggleMute();
+            } else if (e.key === 'ArrowRight' && isPlaying && currentScene < scenes.length - 1) {
+                jumpToScene(currentScene + 1);
+            } else if (e.key === 'ArrowLeft' && isPlaying && currentScene > 0) {
+                jumpToScene(currentScene - 1);
             }
         });
 
-        console.info('Presentation loaded. Controls: Space = Play/Pause, R = Restart, M = Mute/Unmute');
+        console.log('✨ Modern iOS-style presentation ready!');
+        console.log('Controls: Space = Play/Pause, R = Restart, M = Mute, Arrow Keys = Navigate');
     </script>
 </body>
 </html>
